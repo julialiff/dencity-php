@@ -31,13 +31,24 @@ if(!empty($_GET['api'])) {
         $parada = $parada[0];
         $parada = substr($parada, 2);
         $parada = str_replace('"', '', $parada);
-        echo $parada;
+        // echo $parada;
         $convert_to_array = explode(',', $parada);
         for($i = 0; $i < count($convert_to_array ); $i++){
             $key_value = explode(':', $convert_to_array [$i]);
-            $end_array[$key_value [0]] = $key_value [1];
+            $p[$key_value [0]] = $key_value [1];
         }
-        echo $end_array['cp'];
+        // echo $p['cp'];
+
+        $ch = curl_init();
+        curl_setopt ($ch, CURLOPT_URL, $url . '/Previsao/Parada?codigoParada=' . $p['cp']);
+        curl_setopt ($ch, CURLOPT_POST, false);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Length: 0'));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt ($ch, CURLOPT_COOKIEFILE, $cookie);
+        curl_setopt ($ch, CURLOPT_COOKIEJAR, $cookie);
+        $response = curl_exec ($ch); // POR QUE TÁ PRINTANDO ESSA LINHA SEM EU MANDAR?
+        curl_close ($ch);
+        echo $response;
 
         // echo $response;
 
