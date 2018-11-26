@@ -16,6 +16,7 @@ if(!empty($_GET['api'])) {
     curl_setopt ($ch, CURLOPT_URL, $url . '/Login/Autenticar?token=' . $token);
     curl_setopt ($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Length: 0'));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt ($ch, CURLOPT_COOKIEFILE, $cookie);
     curl_setopt ($ch, CURLOPT_COOKIEJAR, $cookie);
     curl_exec ($ch);
@@ -24,19 +25,27 @@ if(!empty($_GET['api'])) {
     switch ($api) {
       case 'PARADAS':
         // Busca por paradas naquele endereço
-        $ch = curl_init();
-        curl_setopt ($ch, CURLOPT_URL, $url . '/Parada/Buscar?termosBusca=' . $termosBusca);
-        curl_setopt ($ch, CURLOPT_POST, false);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Length: 0'));
-        curl_setopt ($ch, CURLOPT_COOKIEFILE, $cookie);
-        curl_setopt ($ch, CURLOPT_COOKIEJAR, $cookie);
-        $r = curl_exec ($ch); // POR QUE TÁ PRINTANDO ESSA LINHA SEM EU MANDAR?
-        curl_close ($ch);
-        // $json_response = json_encode($r);
-        // $s =  str_split($json_response, 10);
+        require('paradas.php');
+        $parada = paradas($termosBusca, $cookie, $url);
+        $parada = explode ("}", $parada);
+        $parada = $parada[0];
+        $parada = substr($parada, 2);
+        $parada = str_replace('"', '', $parada);
+        echo $parada;
+        $convert_to_array = explode(',', $parada);
+        for($i = 0; $i < count($convert_to_array ); $i++){
+            $key_value = explode(':', $convert_to_array [$i]);
+            $end_array[$key_value [0]] = $key_value [1];
+        }
+        echo $end_array['cp'];
+
+        // echo $response;
+
+        // $json_response = json_encode($response);
+        // echo $json_response;
+        // $s =  str_split($response, 10);
         // echo $s[0];
-        // $a = explode ("}", $json_response);
-        // echo $a[1];
+
         // echo gettype($json_response[0]);
         // echo $response;
         break;
