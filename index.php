@@ -61,30 +61,29 @@ if(!empty($_GET['api'])) {
         // echo $response;
         break;
       case 'LINHAS':
-        $ch = curl_init();
-        $termosBusca = substr($termosBusca, 0, 4);
-        curl_setopt ($ch, CURLOPT_URL, $url . '/Linha/Buscar?termosBusca=' . $termosBusca);
-        curl_setopt ($ch, CURLOPT_POST, false);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Length: 0'));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt ($ch, CURLOPT_COOKIEFILE, $cookie);
-        curl_setopt ($ch, CURLOPT_COOKIEJAR, $cookie);
-        $linhas = curl_exec ($ch);
-        curl_close ($ch);
-        echo $linhas;
-
-
-
+      // Errado, usar código único da linha apenas
         // $ch = curl_init();
-        // curl_setopt ($ch, CURLOPT_URL, $url . '/Linha/Buscar?codigoLinha=' . $termosBusca);
+        // $termosBusca = substr($termosBusca, 0, 4);
+        // curl_setopt ($ch, CURLOPT_URL, $url . '/Linha/Buscar?termosBusca=' . $termosBusca);
         // curl_setopt ($ch, CURLOPT_POST, false);
         // curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Length: 0'));
         // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         // curl_setopt ($ch, CURLOPT_COOKIEFILE, $cookie);
         // curl_setopt ($ch, CURLOPT_COOKIEJAR, $cookie);
-        // $result = curl_exec ($ch);
+        // $linhas = curl_exec ($ch);
         // curl_close ($ch);
-        // echo $result;
+        // echo $linhas;
+
+        $ch = curl_init();
+        curl_setopt ($ch, CURLOPT_URL, $url . '/Previsao/Linha?codigoLinha=' . $termosBusca);
+        curl_setopt ($ch, CURLOPT_POST, false);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Length: 0'));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt ($ch, CURLOPT_COOKIEFILE, $cookie);
+        curl_setopt ($ch, CURLOPT_COOKIEJAR, $cookie);
+        $result = curl_exec ($ch);
+        curl_close ($ch);
+        echo $result;
         break;
       default:
         response(400, "API a ser buscada é inválida", $api);
